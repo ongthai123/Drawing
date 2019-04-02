@@ -59,22 +59,44 @@ public class PaintView extends View implements View.OnTouchListener {
             canvas.drawCircle(points.get(i).x, points.get(i).y, points.get(i).size, paint);
         }
 
+        for(int j = 0; j < temp.size(); j++){
+            paint.setColor((temp.get(j)).colour);
+            canvas.drawCircle(temp.get(j).x, temp.get(j).y, temp.get(j).size, paint);
+        }
+
     }
     @Override
     public boolean onTouch(View v, MotionEvent event)
     {
         Random random = new Random();
 
-        Point point = new Point(event.getX(),event.getY(), shapeSize, random.nextInt());
-//        points.add(point);
+        int pointerCount = event.getPointerCount();
 
-        if(temp.size() != 0) {
-            points.set(points.size() - temp.size(),point);
-            temp.clear();
+        for(int i = 0; i<pointerCount; i++){
+            int x = (int) event.getX(i);
+            int y = (int) event.getY(i);
+            int id = (int) event.getPointerId(i);
+
+            if(id == 0){
+                Point p1 = new Point(x,y,shapeSize,random.nextInt());
+                points.add(p1);
+            }
+            if(id == 1){
+                Point p2 = new Point(x,y,shapeSize,random.nextInt());
+                temp.add((p2));
+            }
         }
-        else{
-            points.add(point);
-        }
+
+//        Point point = new Point(event.getX(),event.getY(), shapeSize, random.nextInt());
+////        points.add(point);
+//
+//        if(temp.size() != 0) {
+//            points.set(points.size() - temp.size() -1 ,point);
+//            temp.clear();
+//        }
+//        else{
+//            points.add(point);
+//        }
 
         invalidate();
         return true;
